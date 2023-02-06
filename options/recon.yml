@@ -1,0 +1,33 @@
+# Technical details
+name: airfoil_qr_l2e2_nll10
+workers: 4
+
+# Data
+labeled_num: 200
+dataset_enlarge_ratio: 4
+batch_size: 8
+ul_batch_size: 8
+val_batch_size: 1
+print_freq: 2
+test_freq: 10
+save_dir: ./experiments/
+data_dir: /mnt/zyy/3D
+# options: cylinder,heat,airfoil
+# InterpolDataset  PointDataset
+dataset:
+  name: airfoil_mask
+  type: InterpolDataset
+
+# Optimization
+loss: mae
+epoch: 100 # 80 epoch for simple heat
+
+optim:
+  lr: 0.001
+  type: adam
+
+scheduler:
+  type: cos
+  min_lr: !!float 1e-6
+  T_max: 100
+  gamma: 0.927 # 0.927 for 80 epoch
