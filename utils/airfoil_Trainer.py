@@ -17,11 +17,7 @@ from torch.distributions.normal import Normal
 class SubTrainer(Trainer):
     def __init__(self, opt, writer):
         super(SubTrainer, self).__init__(opt, writer)
-        # self.model = self.init_model('MultiMLP', [6, 128, 1280, 4800, 65536])
-        # self.model = self.init_model('MLP', [6, 128, 1280, 4800, 65536])
-        self.model = self.init_model('UNet', 3, 6)  # 用分位数时加1
-        # self.model = self.init_model('multi_UNet', 3, 3)
-        # self.model = self.init_model('MT_UNet', 3, 3)
+        self.model = self.init_model('UNet', 3, 3) 
         self.optimizer, self.scheduler = self.init_training(self.model.parameters())
         self.model = self.model.to(self.device)
 
@@ -114,16 +110,6 @@ class SubTrainer(Trainer):
                     pseudo_var = torch.var(out, dim=0)
                     pseudo_mean = pseudo_mean * mask
                     pseudo_var = pseudo_var * mask
-
-                # bs = pseudo_mean.shape[0]
-                # random = np.random.randint(0, 8, size=bs)
-                # transformed_in = torch.zeros_like(ul_input)
-                # transformed_out = torch.zeros_like(pseudo_mean)
-                # transformed_var = torch.zeros_like(pseudo_var)
-                # for i in range(bs):
-                #     transformed_in[i, ...] = augmentation(ul_input[i, ...], case=random[i])
-                #     transformed_out[i, ...] = augmentation(pseudo_mean[i, ...], case=random[i])
-                #     transformed_var[i, ...] = augmentation(pseudo_var[i, ...], case=random[i])
 
                 ul_out = net(ul_input)
                 ul_out = ul_out * mask
