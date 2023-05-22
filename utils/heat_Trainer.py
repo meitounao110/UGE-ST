@@ -82,10 +82,8 @@ class SubTrainer(Trainer):
         self.model.load_state_dict(checkpoint['weight'])
         self.model.eval()
         # init student model
-        # self.opt['iters'] = 40000 # epoch=160
-        # self.opt['scheduler']['gamma'] = 0.99985  # 0.963
         self.opt['iters'] = self.opt['iters'] * 2
-        self.opt['scheduler']['gamma'] = 0.963  # 0.963 for 160 epoch
+        self.opt['scheduler']['gamma'] = 0.963  
         net = self.init_model('MLP', [20, 128, 1280, 4800, 40000])
         net = net.to(self.device)
         self.optimizer, self.scheduler = self.init_training(net.parameters())
@@ -154,10 +152,8 @@ class SubTrainer(Trainer):
         checkpoint = torch.load(net_path)
         net.load_state_dict(checkpoint['weight'])
         self.opt['optim']['lr'] *= 0.01
-        # self.opt['iters'] = 20000 # epoch = 80
-        # self.opt['scheduler']['gamma'] = 0.9998  # 0.951
-        self.opt['iters'] = self.opt['iters'] / 2  # epoch = 80
-        self.opt['scheduler']['gamma'] = 0.951  # 0.951 for 80 epoch
+        self.opt['iters'] = self.opt['iters'] / 2  
+        self.opt['scheduler']['gamma'] = 0.951  
         self.optimizer, self.scheduler = self.init_training(net.parameters())
         current_iter, epoch = 0, 0
         net.train()
