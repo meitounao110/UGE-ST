@@ -48,29 +48,4 @@ class multi_UNet(nn.Module):
         return y1, y2, y3
 
 
-if __name__ == '__main__':
-    from itertools import permutations
 
-    x = torch.randn(4, 6, 200, 200)  # .cuda()
-    z = torch.randn(4, 3, 200, 200).cuda()
-    p = []
-    for i in range(x.shape[0]):
-        p.append([x[i, ...], z[i, ...]])
-    p = list(permutations(p, 2))
-    p_diff = []
-    for i in range(len(p)):
-        p_diff.append(p[i][0][1] - p[i][1][1])
-        p[i] = torch.cat([p[i][0][0], p[i][1][0]], dim=0)
-    p = torch.stack(p, dim=0)
-    p_diff = torch.stack(p_diff, dim=0)
-    # x = torch.randn(4, 3, 50, 50)
-    # x = torch.stack([x1, x2], dim=1)
-    print("x.shape", x.shape)
-    model = Twin_UNet(3, 3)
-    # torch.save(model, "/mnt/zyy/reconstruction/model.pth")
-    # net_path = "/mnt/zyy/reconstruction/model.pth"
-    # checkpoint = torch.load(net_path)
-    print(model)
-    # y = model(x)
-    y = model(x, step=2)
-    print(y["final"].shape)
