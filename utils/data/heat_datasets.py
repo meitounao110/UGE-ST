@@ -40,51 +40,6 @@ class PointDataset(Dataset):
         return len(self.data)
 
 
-class PointDataset1(Dataset):
-    def __init__(self, root, split, opt):
-        self.root = root
-        self.data = []
-        if split == 'train':
-            data_path = "/mnt/zyy/3D/real_data_88/train"
-            for i in range(opt['labeled_num']):
-                data_dir = os.path.join(data_path, f"Example{i}.mat")
-                data = sio.loadmat(data_dir)
-                self.data.append(data[f'u'])
-        if split == 'ul_train':
-            data_path = "/mnt/zyy/3D/real_data_88/train"
-            for i in range(600, 1200):
-                data_dir = os.path.join(data_path, f"Example{i}.mat")
-                data = sio.loadmat(data_dir)
-                self.data.append(data[f'u'])
-        if split == 'test':
-            data_path = "/mnt/zyy/3D/real_data_88/test"
-            for i in range(1200, 1600):
-                data_dir = os.path.join(data_path, f"Example{i}.mat")
-                data = sio.loadmat(data_dir)
-                self.data.append(data[f'u'])
-        self.data = np.array(np.expand_dims(self.data, axis=1))
-        B, _, H, W = self.data.shape
-        self.data = (self.data - 320) / 100
-        self.target = self.data.copy().reshape(B, 1, H * W)
-        idx = np.array(np.where(data["position"] == 1))
-        self.input = self.data[:, :, idx[0], idx[1]]
-        # self.input = self.data[:, :, [42, 8, 59, 80, 175, 121], [26, 128, 191, 32, 12, 132]]
-        print(1)
-
-        # mask = np.zeros_like(self.target)
-        # mask[:, n_idx["incp_point"][0, :]] = 1
-        # self.target_m = self.target * mask
-
-    def __getitem__(self, index):
-        input = torch.tensor(self.input[index, ...])
-        target = torch.tensor(self.target[index, ...])
-        # target_m = torch.tensor(self.target[index, ...])
-        return input, target
-
-    def __len__(self):
-        return len(self.data)
-
-
 class InterpolDataset(Dataset):
     def __init__(self, root, split, opt):
         self.root = root
