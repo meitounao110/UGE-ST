@@ -117,8 +117,8 @@ def main(opt):
     opt["save_dir"] = os.path.join(log_dir, "model")
 
     seed = 114514
-    torch.manual_seed(seed)  # 为CPU设置随机种子
-    torch.cuda.manual_seed(seed)  # 为当前GPU设置随机种子
+    torch.manual_seed(seed)  # set seed for cpu
+    torch.cuda.manual_seed(seed)  # set seed for gpu
     np.random.seed(seed)  # Numpy module.
     random.seed(seed)  # Python random module.
     torch.backends.cudnn.benchmark = True
